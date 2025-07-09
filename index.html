@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Name Streets in... Lethbridge!</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: row;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #sidebar {
+      width: 320px;
+      height: 100vh;
+      background: #e9dfc7;
+      padding: 1.5rem 1.8rem;
+      box-shadow: 3px 0 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    #map {
+      flex-grow: 1;
+      height: 100vh;
+      min-width: 0;
+    }
+
+    #title-box {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #2f4a1a;
+      margin-bottom: 1rem;
+      text-align: center;
+      border-bottom: 2px solid #8d7e4b;
+      padding-bottom: 0.5rem;
+    }
+
+    #streetInput {
+      padding: 10px 14px;
+      font-size: 16px;
+      border: 2px solid #8d7e4b;
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #instructions {
+      font-size: 14px;
+      color: #5a5a4d;
+      margin-bottom: 1.2rem;
+    }
+
+    #progress-container {
+      background: #b8ac7f;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      margin-bottom: 1rem;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4a6820;
+      transition: width 0.4s ease;
+    }
+
+    #progress {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 1rem;
+    }
+
+    #guessed-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      flex-grow: 1;
+      overflow-y: auto;
+      border-top: 1px solid #8d7e4b;
+    }
+
+    .guessed-street {
+      padding: 8px 10px;
+      border-bottom: 1px solid #c3b678;
+      cursor: pointer;
+    }
+
+    .guessed-street:hover {
+      background: #d5d1a8;
+      text-decoration: underline;
+      color: #2f4a1a;
+    }
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  #sidebar {
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    padding: 1rem;
+  }
+
+  #map {
+    height: 60vh;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div id="sidebar">
+    <div id="title-box">Name Streets in... Lethbridge!</div>
+    <input type="text" id="streetInput" placeholder="Type a street name..." />
+    <div id="instructions">
+      Type a street’s number or name (no need for type or direction!) and press Enter.<br />
+      
+      Correct guesses will highlight all streets with that number or name and add them below.<br />
+      
+      Try to guess as many as possible, and don't forget West Lethbridge!
+    </div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div id="progress">0 street names guessed! That's 0.00% of the road network.</div>
+    <ul id="guessed-list"></ul>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="lethbridge_script.js"></script>
+</body>
+</html>
