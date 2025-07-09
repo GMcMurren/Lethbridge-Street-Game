@@ -68,8 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function showProgressElements() {
     document.getElementById('progress-wrapper').style.display = 'block';
   }
-
+  const guessedListSet = new Set();
   function addToGuessedList(name, layer) {
+    if (guessedListSet.has(name)) return; // Skip if already listed
+    guessedListSet.add(name);
     const list = document.getElementById('guessed-list');
     const li = document.createElement('li');
     li.textContent = name;
@@ -77,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     li.onclick = () => {
       map.fitBounds(layer.getBounds(), { maxZoom: 16 });
     };
-    list.appendChild(li);
+    list.insertBefore(li, list.firstChild);;
   }
 
   function saveProgress() {
