@@ -126,6 +126,36 @@ document.addEventListener('DOMContentLoaded', () => {
       location.reload();
     }
   }
+  function giveHint() {
+    const unguessed = Array.from(allStreets.entries())
+      .filter(([key, segments]) => {
+        return segments.length > 0 && !guessedNames.has(segments[0].name);
+      });
+
+    if (unguessed.length === 0) {
+      alert("You've guessed every street!");
+      return;
+    }
+
+    const [key, segments] = unguessed[Math.floor(Math.random() * unguessed.length)];
+
+    // Split StreetOnly key into words
+    const words = key.split(/\s+/);
+
+    let hintPortion = '';
+
+    if (words.length > 1) {
+      // Capitalize first letter of the first word
+      hintPortion = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+      alert(`Hint: One of the missing streets starts with "${hintPortion}".`);
+    } else {
+      // Reveal first half of the single word, capitalize first letter
+      const halfLength = Math.ceil(key.length / 2);
+      const firstHalfRaw = key.slice(0, halfLength);
+      hintPortion = firstHalfRaw.charAt(0).toUpperCase() + firstHalfRaw.slice(1);
+      alert(`Hint: One of the missing streets starts with "${hintPortion}...".`);
+    }
+  }
 
   document.getElementById('streetInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') {
@@ -171,4 +201,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Make resetProgress callable from the HTML
   window.resetProgress = resetProgress;
+  window.giveHint = giveHint;
 });
