@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const savedName of saved) {
       const normalized = savedName.toLowerCase();
       if (allStreets.has(normalized)) {
+        const seenNames = new Set();
         for (const { name, layer, length } of allStreets.get(normalized)) {
           if (!guessedNames.has(name)) guessedNames.set(name, []);
           guessedNames.get(name).push(layer);
@@ -98,7 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
           layer.bindTooltip(name, { permanent: false, direction: "top" });
 
           guessedLength += length;
-          addToGuessedList(name, layer);
+
+          if (!seenNames.has(name)) {
+            addToGuessedList(name, layer);
+            seenNames.add(name);
+          }
         }
       }
     }
@@ -121,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const input = e.target.value.trim().toLowerCase();
       if (allStreets.has(input)) {
         let newGuess = false;
+        const seenNames = new Set();
 
         for (const { name, layer, length } of allStreets.get(input)) {
           if (!guessedNames.has(name)) {
@@ -133,7 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
           layer.setStyle({ color: "#007700", weight: 3 });
           layer.bindTooltip(name, { permanent: false, direction: "top" });
 
-          addToGuessedList(name, layer);
+          if (!seenNames.has(name)) {
+            addToGuessedList(name, layer);
+            seenNames.add(name);
+          }
         }
 
         if (newGuess && guessedNames.size === 1) {
@@ -150,6 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Expose reset for HTML button
+  // Make resetProgress callable from the HTML
   window.resetProgress = resetProgress;
 });
