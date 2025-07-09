@@ -54,10 +54,15 @@ function updateProgress() {
     alert("🎉 You're halfway there! Keep going!");
     halfCongratsShown = true;
   }
+
   if (!fullCongratsShown && percent >= 100) {
     alert("🏆 Incredible! You’ve guessed the entire Lethbridge street network!");
     fullCongratsShown = true;
   }
+}
+
+function showProgressElements() {
+  document.getElementById('progress-wrapper').style.display = 'block';
 }
 
 function addToGuessedList(name, layer) {
@@ -96,7 +101,7 @@ function restoreProgress() {
   }
 
   if (guessedNames.size > 0) {
-    document.getElementById('progress-container').style.display = 'block';
+    showProgressElements();
     updateProgress();
   }
 }
@@ -129,7 +134,7 @@ document.getElementById('streetInput').addEventListener('keydown', e => {
       }
 
       if (newGuess && guessedNames.size === 1) {
-        document.getElementById('progress-container').style.display = 'block';
+        showProgressElements();
       }
 
       if (newGuess) {
