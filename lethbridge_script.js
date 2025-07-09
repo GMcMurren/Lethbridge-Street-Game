@@ -145,11 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        if (newGuess && guessedNames.size === 1) {
-          showProgressElements();
-        }
-
         if (newGuess) {
+          const wrapper = document.getElementById('progress-wrapper'); 
+          if (wrapper.style.display === 'none') {
+            showProgressElements();
+          }
           updateProgress();
           saveProgress();
         }
