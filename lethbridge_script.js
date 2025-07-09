@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
   }).addTo(map);
 
-  const allStreets = new Map(); // StreetOnly → [{name, layer, length}]
+  const allStreets = new Map(); // streetOnly → [{name, layer, length}]
   const guessedNames = new Map(); // name → [layers]
+  const seenLayers = new Set();   // layer IDs to avoid double-counting
   let totalLength = 0;
   let guessedLength = 0;
 
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderer: L.canvas()
       }).addTo(map);
 
-      restoreProgress(); // after map + data are loaded
+      restoreProgress();
     });
 
   function updateProgress() {
@@ -91,14 +92,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const normalized = savedName.toLowerCase();
       if (allStreets.has(normalized)) {
         const seenNames = new Set();
+
         for (const { name, layer, length } of allStreets.get(normalized)) {
+          const layerId = L.Util.stamp(layer);
+          if (!seenLayers.has(layerId)) {
+            guessedLength += length;
+            seenLayers.add(layerId);
+          }
+
           if (!guessedNames.has(name)) guessedNames.set(name, []);
           guessedNames.get(name).push(layer);
 
           layer.setStyle({ color: "#007700", weight: 3 });
           layer.bindTooltip(name, { permanent: false, direction: "top" });
-
-          guessedLength += length;
 
           if (!seenNames.has(name)) {
             addToGuessedList(name, layer);
@@ -129,9 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const seenNames = new Set();
 
         for (const { name, layer, length } of allStreets.get(input)) {
+          const layerId = L.Util.stamp(layer);
+          if (!seenLayers.has(layerId)) {
+            guessedLength += length;
+            seenLayers.add(layerId);
+          }
+
           if (!guessedNames.has(name)) {
             guessedNames.set(name, []);
-            guessedLength += length;
             newGuess = true;
           }
 
@@ -144,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
             seenNames.add(name);
           }
         }
-
         if (newGuess) {
           const wrapper = document.getElementById('progress-wrapper'); 
           if (wrapper.style.display === 'none') {
