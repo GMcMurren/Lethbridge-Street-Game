@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }).addTo(map);
       map.invalidateSize();
     });
-
+  function showProgressBar() {
+    document.getElementById('progress-container').style.display = 'block';
+  }
   function updateProgress() {
     const percent = (guessedLength / totalLength) * 100;
     document.getElementById('progress').textContent =
@@ -65,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('streetInput').addEventListener('keydown', e => {
+    if (guessedNames.size === 0) {
+  showProgressBar();}
     if (e.key === 'Enter') {
       const input = String(e.target.value).trim().toLowerCase();
       if (!allStreets.has(input)) return;
